@@ -10,18 +10,15 @@ from tempfile import NamedTemporaryFile
 import time
 import logging
 
-# Set up logging
 logging.basicConfig(level=logging.INFO, 
                     format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-# API key setup
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 
-# Define all directory paths
 UPLOAD_FOLDER = 'uploads/'
 USER_AUDIO_FOLDER = os.path.join(UPLOAD_FOLDER, 'user_audio')
 AI_AUDIO_FOLDER = os.path.join(UPLOAD_FOLDER, 'ai_audio')
@@ -29,7 +26,6 @@ CONCEPT_AUDIO_FOLDER = os.path.join(UPLOAD_FOLDER, 'concept_audio')
 STATIC_FOLDER = 'static'
 ALLOWED_EXTENSIONS = {'txt', 'png', 'jpg', 'jpeg', 'gif', 'pdf', 'mp4', 'wav', 'mp3', 'ogg'}
 
-# Configure app paths
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['USER_AUDIO_FOLDER'] = USER_AUDIO_FOLDER
 app.config['AI_AUDIO_FOLDER'] = AI_AUDIO_FOLDER
@@ -75,7 +71,6 @@ def speech_to_text(audio_file_path):
     logger.info(f"Processing audio file: {audio_file_path}")
     
     try:
-        # Try OpenAI API first
         with open(audio_file_path, "rb") as audio_file:
             logger.info("Calling OpenAI Whisper API...")
             transcript = openai.Audio.transcribe(
@@ -88,7 +83,6 @@ def speech_to_text(audio_file_path):
         logger.error(f"Error using OpenAI Whisper API: {str(e)}")
         logger.info("Falling back to local Whisper model...")
         
-        # Fall back to local model if API fails
         if model is not None:
             try:
                 logger.info("Using local Whisper model for transcription...")
@@ -111,7 +105,6 @@ def generate_intro_audio():
     
     intro_audio_path = os.path.join(app.config['AI_AUDIO_FOLDER'], intro_audio_filename)
 
-    # Call the function to generate the audio file
     success = generate_audio(intro_text, intro_audio_path)
 
     if success:
@@ -595,6 +588,29 @@ if __name__ == '__main__':
         app.run(debug=True)
     else:
         logger.error("Path verification failed. Check permissions and try again.")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
